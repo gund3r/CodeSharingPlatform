@@ -1,8 +1,9 @@
-package platform;
+package platform.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.stereotype.Component;
+import platform.utils.FormatDataTime;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -122,7 +123,7 @@ public class Code {
 
     @Override
     public String toString() {
-        return "platform.Code{" +
+        return "platform.entities.Code{" +
                 "uuid=" + uuid +
                 ", code='" + code + '\'' +
                 ", date='" + date + '\'' +

@@ -1,7 +1,11 @@
-package platform;
+package platform.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import platform.repository.SnippetsRepository;
+import platform.entities.Code;
+import platform.exceptions.CodeNotFoundException;
+import platform.utils.FormatDataTime;
 
 import java.time.LocalTime;
 import java.util.*;
@@ -30,16 +34,16 @@ public class SnippetsService {
         return "{ \"id\" : \"" + result + "\" }";
     }
 
-    Code[] getLatestCode() {
+    public Code[] getLatestCode() {
         System.out.println("getLatestCode");
         Arrays.toString(repository.findAllByTimeAndViewsOrderByDate().toArray(new Code[0]));
         return repository.findAllByTimeAndViewsOrderByDate().toArray(new Code[0]);
     }
 
-    Code getCodeFromRepository(UUID uuid) {
+    public Code getCodeFromRepository(UUID uuid) {
         System.out.println("getCodeFromRepository");
         if (repository.findById(uuid).isPresent()) {
-            System.out.println("platform.Code from repo: " + repository.findById(uuid).get().toString());
+            System.out.println("platform.entities.Code from repo: " + repository.findById(uuid).get().toString());
             return repository.findById(uuid).get();
         } else {
             throw new CodeNotFoundException();
@@ -50,12 +54,12 @@ public class SnippetsService {
         repository.delete(code);
     }
 
-    void updateTimeById(UUID uuid) {
+    public void updateTimeById(UUID uuid) {
         System.out.println("updateTimeById");
         Code codeToUpdate = getCodeFromRepository(uuid);
         int time = codeToUpdate.getTime();
         codeToUpdate.setTime(setTimeToSecretCode(codeToUpdate));
-        System.out.println("platform.Code was updated, now time is " + codeToUpdate.getTime());
+        System.out.println("platform.entities.Code was updated, now time is " + codeToUpdate.getTime());
         if (codeToUpdate.getTime() > 0) {
             repository.save(codeToUpdate);
         } else {
@@ -63,7 +67,7 @@ public class SnippetsService {
         }
     }
 
-    void updateViewsById(UUID uuid) {
+    public void updateViewsById(UUID uuid) {
         System.out.println("updateViewsById");
         Code codeToUpdate = getCodeFromRepository(uuid);
         int views = codeToUpdate.getViews();
@@ -74,7 +78,7 @@ public class SnippetsService {
         } else {
             repository.delete(codeToUpdate);
         }
-        System.out.println("platform.Code was updated, now views is " + codeToUpdate.getViews());
+        System.out.println("platform.entities.Code was updated, now views is " + codeToUpdate.getViews());
     }
 
     boolean isViewsOver(Code code) {

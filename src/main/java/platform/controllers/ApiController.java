@@ -1,9 +1,11 @@
-package platform;
+package platform.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import platform.entities.Code;
+import platform.services.SnippetsService;
 
 import javax.validation.Valid;
 import java.util.UUID;
