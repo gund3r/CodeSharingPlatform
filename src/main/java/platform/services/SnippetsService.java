@@ -1,5 +1,6 @@
 package platform.services;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import platform.repository.SnippetsRepository;
@@ -10,15 +11,16 @@ import platform.utils.FormatDataTime;
 import java.time.LocalTime;
 import java.util.*;
 
-
 @Service
 public class SnippetsService {
+
+    final Logger log = org.slf4j.LoggerFactory.getLogger(SnippetsService.class);
 
     @Autowired
     SnippetsRepository repository;
 
     public String addCode(Code code) {
-        System.out.println("addCode");
+        log.debug("Request to addCode: {}", code);
         Code newCode = new Code();
         newCode.setCode(code.getCode());
         newCode.setLocalDateTime();
@@ -29,21 +31,21 @@ public class SnippetsService {
         newCode.setViewsLimit(code.getViews() > 0);
         newCode.setUuid(UUID.randomUUID());
         UUID result = newCode.getUuid();
-        System.out.println(newCode.toString());
+        log.debug("New snippet to repository: {}", newCode);
         repository.save(newCode);;
         return "{ \"id\" : \"" + result + "\" }";
     }
 
     public Code[] getLatestCode() {
-        System.out.println("getLatestCode");
+        log.debug("Request to getLatestCode");
         Arrays.toString(repository.findAllByTimeAndViewsOrderByDate().toArray(new Code[0]));
         return repository.findAllByTimeAndViewsOrderByDate().toArray(new Code[0]);
     }
 
     public Code getCodeFromRepository(UUID uuid) {
-        System.out.println("getCodeFromRepository");
+        log.debug("Request to getCodeFromRepository: {}", uuid);
         if (repository.findById(uuid).isPresent()) {
-            System.out.println("platform.entities.Code from repo: " + repository.findById(uuid).get().toString());
+            log.debug("Snippet from repository: {}", repository.findById(uuid).get().toString());
             return repository.findById(uuid).get();
         } else {
             throw new CodeNotFoundException();
@@ -51,15 +53,16 @@ public class SnippetsService {
     }
 
     void deleteCodeFromRepository(Code code) {
+        log.debug("Request to deleteCodeFromRepository: {}", code);
         repository.delete(code);
     }
 
     public void updateTimeById(UUID uuid) {
-        System.out.println("updateTimeById");
+        log.debug("Request to updateTimeById: {}", uuid);
         Code codeToUpdate = getCodeFromRepository(uuid);
         int time = codeToUpdate.getTime();
         codeToUpdate.setTime(setTimeToSecretCode(codeToUpdate));
-        System.out.println("platform.entities.Code was updated, now time is " + codeToUpdate.getTime());
+        log.debug("Snippet was updated, now time is {}", codeToUpdate.getTime());
         if (codeToUpdate.getTime() > 0) {
             repository.save(codeToUpdate);
         } else {
@@ -68,7 +71,7 @@ public class SnippetsService {
     }
 
     public void updateViewsById(UUID uuid) {
-        System.out.println("updateViewsById");
+        log.debug("Request to updateViewsById: {}", uuid);
         Code codeToUpdate = getCodeFromRepository(uuid);
         int views = codeToUpdate.getViews();
         views--;
@@ -78,36 +81,36 @@ public class SnippetsService {
         } else {
             repository.delete(codeToUpdate);
         }
-        System.out.println("platform.entities.Code was updated, now views is " + codeToUpdate.getViews());
+        log.debug("Snippet was updated, now views is {}", codeToUpdate.getViews());
     }
 
     boolean isViewsOver(Code code) {
-        System.out.println("isViewsOver");
+        log.debug("Request to isViewsOver: {}", code);
         int viewsToWatch = code.getViews();
-        System.out.println("Check for views, views is " + viewsToWatch);
+        log.debug("Check for views, views is {}", viewsToWatch);
         return viewsToWatch < 0 ? true : false;
     }
 
     boolean isTimeOver(Code code) {
-        System.out.println("isTimeOver");
+        log.debug("Request to isTimeOver: {}", code);
         int timeToWatch = code.getTime();
-        System.out.println("Check time, time is " + timeToWatch);
+        log.debug("Check time, time is {}", timeToWatch);
         LocalTime timeOfCreation = getTimeOfCreation(code);
-        System.out.println("TimeOfCreation is " + timeOfCreation);
+        log.debug("TimeOfCreation is {}", timeOfCreation);
         LocalTime localTime = LocalTime.now();
-        System.out.println("LocalTime is " + localTime);
+        log.debug("LocalTime is {}", localTime);
         int differenceOfTime = localTime.toSecondOfDay() - timeOfCreation.toSecondOfDay();;
-        System.out.println("Difference of time is " + differenceOfTime);
+        log.debug("Difference of time is {}", differenceOfTime);
         return differenceOfTime > timeToWatch ? true : false;
     }
 
     LocalTime getTimeOfCreation(Code code) {
-        System.out.println("getTimeOfCreation");
+        log.debug("Request to getTimeOfCreation: {}", code);
         return code.getLocalDateTime().toLocalTime();
     }
 
     Integer setTimeToSecretCode(Code code) {
-        System.out.println("setTimeToSecretCode");
+        log.debug("Request to setTimeToSecretCode: {}", code);
         int result = 0;
         int timeToWatch = code.getTime();
         LocalTime timeOfCreation = getTimeOfCreation(code);
