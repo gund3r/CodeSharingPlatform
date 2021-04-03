@@ -3,7 +3,7 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-      <title>platform.entities.Code</title>
+      <title>Secret code snippet</title>
       <link rel="stylesheet"
             href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/default.min.css">
       <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/highlight.min.js"></script>
@@ -18,7 +18,7 @@
       <meta charset="UTF-8">
     </head>
     <body>
-      <h2 class="greetings">platform.entities.Code snippet</h2>
+      <h2 class="greetings">Code snippet by direct link</h2>
       <div>
         <p><span id="load_date" class="time">${date}</span></p>
         <#if (views > 0)>

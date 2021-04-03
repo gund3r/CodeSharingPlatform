@@ -8,9 +8,6 @@ hidden from most of the colleagues. This piece of code should
 only be available to certain people, and it may be deleted in the 
 future to hide the traces.
 
-In this project, we made such functionality possible. You will need
-to add two limitations on the code snippet's visibility:
-
 A limit on the number of views will allow viewing the snippet only a certain
 number of times, after which the snippet is deleted from the database.
 A limit on the viewing time will allow viewing a code snippet for a certain 
@@ -23,7 +20,7 @@ numeric identifiers, can't we find the secret snippets just by
 looking through the different numbers? Indeed, it is quite easy to 
 access secret links this way. To avoid this, we are generate links 
 not with consecutive numbers but with UUID's (Universally Unique
-IDentifiers).
+Identifiers).
 
 ### Examples
 
@@ -110,3 +107,7 @@ Response:
 * possible to add snippets via fill out the form by web at `/code/new`;
 * to get snippet by the direct link `/code/uuid`;
 * get latest snippets at `/code/latest`.
+
+### Running the application ###
+
+`make #build & run`
